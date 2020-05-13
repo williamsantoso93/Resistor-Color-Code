@@ -7,7 +7,7 @@ enum ColorCode {
     case black
     case brown
     case red
-    case orang
+    case orange
     case yellow
     case green
     case blue
@@ -41,59 +41,104 @@ class MyViewController : UIViewController {
     let resistanceLabel  = UILabel()
     
     var valueLabels = [UILabel]()
+    var colorButtons = [UIButton]()
     
     let ringButtonStackView = UIStackView()
-    let colorButtonStackView1 = UIStackView()
-    let colorButtonStackView2 = UIStackView()
-    let colorButtonStackView3 = UIStackView()
+    let colorButtonStackView = UIStackView()
     
     var resistorRings: [ColorCode] = [.none, .none, .none, .none]
     
     var rings: [Float] = [0, 0, 0, 0]
-    let ringsType: [RingType] = [.digit, .digit, .multiplier, .tolerance]
-    var colors: [UIColor] =  [#colorLiteral(red: 0.04647368193, green: 0.01779429056, blue: 0.01532345638, alpha: 1), #colorLiteral(red: 0.6445639729, green: 0.1679448187, blue: 0.1656729877, alpha: 1), #colorLiteral(red: 1, green: 0.0007271112408, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.6460297108, blue: 0.007757570129, alpha: 1), #colorLiteral(red: 0.9998962283, green: 1, blue: 0, alpha: 1), #colorLiteral(red: 0, green: 0.6916304827, blue: 0.3131190538, alpha: 1), #colorLiteral(red: 0.01152653154, green: 0.4388318062, blue: 0.7538933158, alpha: 1), #colorLiteral(red: 1, green: 0, blue: 1, alpha: 1), #colorLiteral(red: 0.4519323111, green: 0.4520125389, blue: 0.4519209862, alpha: 1), #colorLiteral(red: 0.9998951554, green: 1, blue: 0.999871552, alpha: 1), #colorLiteral(red: 0.8821009398, green: 0.8446164131, blue: 0, alpha: 1), #colorLiteral(red: 0.8521430492, green: 0.8522866368, blue: 0.8521227837, alpha: 1), .clear]
+    let ringsTypes: [RingType] = [.digit, .digit, .multiplier, .tolerance]
+    let colors: [UIColor] =  [#colorLiteral(red: 0.04647368193, green: 0.01779429056, blue: 0.01532345638, alpha: 1), #colorLiteral(red: 0.6445639729, green: 0.1679448187, blue: 0.1656729877, alpha: 1), #colorLiteral(red: 1, green: 0.0007271112408, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.6460297108, blue: 0.007757570129, alpha: 1), #colorLiteral(red: 0.9998962283, green: 1, blue: 0, alpha: 1), #colorLiteral(red: 0, green: 0.6916304827, blue: 0.3131190538, alpha: 1), #colorLiteral(red: 0.01152653154, green: 0.4388318062, blue: 0.7538933158, alpha: 1), #colorLiteral(red: 1, green: 0, blue: 1, alpha: 1), #colorLiteral(red: 0.4519323111, green: 0.4520125389, blue: 0.4519209862, alpha: 1), #colorLiteral(red: 0.9998951554, green: 1, blue: 0.999871552, alpha: 1), #colorLiteral(red: 0.8821009398, green: 0.8446164131, blue: 0, alpha: 1), #colorLiteral(red: 0.8521430492, green: 0.8522866368, blue: 0.8521227837, alpha: 1), .clear]
+    let colorCodes: [ColorCode] = [.black, .brown, .red, .orange, .yellow, .green, .blue, .violet, .gray, .white, .gold, .silver, .none]
+    var currentRing: Int = 0 {
+        didSet {
+            switch currentRing {
+            case 21:
+                for index in 0...12 {
+                    if index > 9 {
+                        valueLabels[index].text = "-"
+                    } else {
+                        valueLabels[index].text = String(index)
+                    }
+                }
+                break
+            case 22:
+                for index in 0...12 {
+                    if index > 9 {
+                        valueLabels[index].text = "-"
+                    } else {
+                        valueLabels[index].text = String(index)
+                    }
+                }
+                break
+            case 23:
+                for index in 0...7 {
+                    valueLabels[index].text = String(index)
+                }
+                valueLabels[8].text = "-"
+                valueLabels[9].text = "-"
+                valueLabels[10].text = "-1"
+                valueLabels[11].text = "-2"
+                valueLabels[12].text = "-"
+                break
+            case 24:
+                valueLabels[0].text = "-"
+                valueLabels[1].text = "-"
+                valueLabels[3].text = "-"
+                valueLabels[4].text = "-"
+                valueLabels[9].text = "-"
+                break
+            default:
+                break
+            }
+            for index in 0...12 {
+                if valueLabels[index].text == "-" {
+                    colorButtons[index].isEnabled = false
+                    colorButtons[index].alpha = 0.5
+                    
+                } else {
+                    colorButtons[index].isEnabled = true
+                    colorButtons[index].alpha = 1
+                }
+            }
+        }
+    }
+    
+    var currentRingType: RingType = .digit {
+        didSet{
+            switch currentRingType {
+            case .digit:
+                break
+            case .multiplier:
+                break
+            case .tolerance:
+                break
+            }
+        }
+    }
     
     override func loadView() {
         
         let view = UIView()
         view.backgroundColor = .white
-
-        let label = UILabel()
-        label.frame = CGRect(x: 150, y: 200, width: 200, height: 20)
-        label.text = "Hello World!"
-        label.textColor = .white
-        
-        view.addSubview(label)
         self.view = view
         
         setupView()
         setupStackViewRingButton()
         setupStackViewColorButton()
-        
-        let button = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 60))
-        button.backgroundColor = .green
-        button.setTitle("Test Button", for: .normal)
-        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-
-        view.addSubview(button)
         getRingColor()
-    }
-
-    @objc func buttonAction(sender: UIButton!) {
-        ringOneView.backgroundColor = .red
-        ringTwoView.backgroundColor = .green
-        ringThreeView.backgroundColor = .blue
-        ringFourView.backgroundColor = .yellow
-        resistanceLabel.text = "Resistance Value :0"
+        
+        currentRing = 21
     }
     
     func setupStackViewRingButton() {
-        
         view.addSubview(ringButtonStackView)
         
         ringButtonStackView.axis = .horizontal
-        ringButtonStackView.distribution  = .fillEqually
-        ringButtonStackView.spacing   = 20
+        ringButtonStackView.distribution = .fillEqually
+        ringButtonStackView.spacing = 20
 
         for i in 1...4 {
             let button = UIButton()
@@ -118,24 +163,18 @@ class MyViewController : UIViewController {
     
     @objc func ringButton(sender: UIButton!) {
         print(sender.tag)
-        switch sender.tag {
-        case 21:
-            for label in valueLabels {
-                label.text = "-"
-            }
-            break
-        default:
-            break
-        }
+        currentRing = sender.tag
+        
+        sender.isSelected = true
     }
     
     func setupStackViewColorButton() {
         var index = 0
         
-        colorButtonStackView1.axis = .vertical
-        colorButtonStackView1.distribution = .fillEqually
-        colorButtonStackView1.alignment = .center
-        colorButtonStackView1.spacing = 10
+        colorButtonStackView.axis = .vertical
+        colorButtonStackView.distribution = .fillEqually
+        colorButtonStackView.alignment = .center
+        colorButtonStackView.spacing = 10
         
         for line in 0...2 {
             let stackView = UIStackView()
@@ -163,7 +202,14 @@ class MyViewController : UIViewController {
                 
                 let button = UIButton()
                 button.backgroundColor = colors[index]
-                if (index == 9) || (index == 12) {
+                if index == 9 {
+                    button.layer.borderWidth = 1
+                    button.layer.borderColor = #colorLiteral(red: 0.5912953019, green: 0.5913977027, blue: 0.591280818, alpha: 1)
+                }
+                if index == 12 {
+                    button.setTitle("None", for: .normal)
+                    button.titleLabel?.font = .systemFont(ofSize: 20)
+                    button.setTitleColor(.black, for: .normal)
                     button.layer.borderWidth = 1
                     button.layer.borderColor = #colorLiteral(red: 0.5912953019, green: 0.5913977027, blue: 0.591280818, alpha: 1)
                 }
@@ -173,31 +219,43 @@ class MyViewController : UIViewController {
                 button.translatesAutoresizingMaskIntoConstraints = false
                 button.widthAnchor.constraint(equalToConstant: 60).isActive = true
                 button.heightAnchor.constraint(equalToConstant: 60).isActive = true
+                colorButtons.append(button)
                 
                 stackView2.addArrangedSubview(label)
                 stackView2.addArrangedSubview(button)
                 stackView.addArrangedSubview(stackView2)
                 index += 1
             }
-            colorButtonStackView1.addArrangedSubview(stackView)
+            colorButtonStackView.addArrangedSubview(stackView)
         }
 
-        view.addSubview(colorButtonStackView1)
-        colorButtonStackView1.translatesAutoresizingMaskIntoConstraints = false
-        colorButtonStackView1.topAnchor.constraint(equalTo: ringButtonStackView.bottomAnchor, constant: 30).isActive = true
-        colorButtonStackView1.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        colorButtonStackView1.widthAnchor.constraint(equalToConstant: 480).isActive = true
-        colorButtonStackView1.heightAnchor.constraint(equalToConstant: 204).isActive = true
-        
-        
-//        view.addSubview(colorButtonStackView2)
-//        colorButtonStackView2.translatesAutoresizingMaskIntoConstraints = false
-//        colorButtonStackView1.topAnchor.constraint(equalTo: ringButtonStackView.bottomAnchor, constant: 10).isActive = true
-//        colorButtonStackView1.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        view.addSubview(colorButtonStackView)
+        colorButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+        colorButtonStackView.topAnchor.constraint(equalTo: ringButtonStackView.bottomAnchor, constant: 25).isActive = true
+        colorButtonStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
     }
     
     @objc func colorButton(sender: UIButton!) {
         print(sender.tag)
+        switch currentRing {
+        case 21:
+            ringOneView.backgroundColor = sender.backgroundColor
+            break
+        case 22:
+            ringTwoView.backgroundColor = sender.backgroundColor
+            break
+        case 23:
+            ringThreeView.backgroundColor = sender.backgroundColor
+            break
+        case 24:
+            ringFourView.backgroundColor = sender.backgroundColor
+            break
+        default:
+            break
+        }
+        resistorRings[currentRing-21] = colorCodes[sender.tag]
+        getRingColor()
+        print(resistorRings)
     }
     
     func setupView() {
@@ -313,20 +371,22 @@ class MyViewController : UIViewController {
     }
     
     func getRingColor() {
-        resistorRings[0] = .green
-        resistorRings[1] = .green
-        resistorRings[2] = .gold
-        resistorRings[3] = .gold
+//        resistorRings[0] = .green
+//        resistorRings[1] = .green
+//        resistorRings[2] = .gold
+//        resistorRings[3] = .gold
         
         for i in 0...3 {
-            rings[i] = colorToValue(ringColor: resistorRings[i], ringType: ringsType[i])
+            rings[i] = colorToValue(ringColor: resistorRings[i], ringType: ringsTypes[i])
             print(rings[i])
         }
         
         let resistance = calculateResistance(rings: rings)
         
-        let resistanceString = "\(resistance) ± \(rings[3])%  Ω"
+        let resistanceString = "\(resistance) ± \(rings[3])% Ω"
         print(resistanceString)
+        
+        resistanceLabel.text = "Resistance Value : \(resistanceString)"
     }
     
     func calculateResistance(rings: [Float]) -> Float {
@@ -345,7 +405,7 @@ class MyViewController : UIViewController {
                 ringValue = 1
             case .red:
                 ringValue = 2
-            case .orang:
+            case .orange:
                 ringValue = 3
             case .yellow:
                 ringValue = 4
@@ -374,7 +434,7 @@ class MyViewController : UIViewController {
                 ringValue = 1
             case .red:
                 ringValue = 2
-            case .orang:
+            case .orange:
                 ringValue = 3
             case .yellow:
                 ringValue = 4
@@ -403,7 +463,7 @@ class MyViewController : UIViewController {
                 ringValue = 1
             case .red:
                 ringValue = 2
-            case .orang:
+            case .orange:
                 ringValue = 100
             case .yellow:
                 ringValue = 100
