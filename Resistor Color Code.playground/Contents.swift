@@ -27,6 +27,7 @@ enum RingType {
 
 class MyViewController : UIViewController {
     let resistorView = UIView()
+    let formulaImageView = UIImageView()
     let resistorImageView = UIImageView()
     let lineImageView  = UIImageView()
     
@@ -58,11 +59,6 @@ class MyViewController : UIViewController {
         view.addSubview(label)
         self.view = view
         
-//        setupLabelView()
-//        setupResistorView()
-//        setupResistorImageView()
-//        setupRingView()
-//        setupLineImageView()
         setupView()
         
         let button = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 50))
@@ -85,7 +81,6 @@ class MyViewController : UIViewController {
     func setupView() {
         //title label
         view.addSubview(titleLabel)
-        
         titleLabel.text = "Resistor Color Code"
         titleLabel.font = UIFont.boldSystemFont(ofSize: 50)
         titleLabel.textAlignment = .center
@@ -101,7 +96,8 @@ class MyViewController : UIViewController {
         resistanceLabel.backgroundColor = .red
         
         //formula image view
-        
+        view.addSubview(formulaImageView)
+        formulaImageView.image = UIImage(named: "Formula@3x.png")
         
         //resistorview
         view.addSubview(resistorView)
@@ -131,7 +127,6 @@ class MyViewController : UIViewController {
         setupViewContraint()
     }
     
-    
     func setupViewContraint() {
         //title label contraint
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -145,14 +140,18 @@ class MyViewController : UIViewController {
         resistanceLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
         
         //formula image view  contraint
-        
+        formulaImageView.translatesAutoresizingMaskIntoConstraints = false
+        formulaImageView.topAnchor.constraint(equalTo: resistanceLabel.bottomAnchor, constant: 10).isActive = true
+        formulaImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
+        formulaImageView.widthAnchor.constraint(equalToConstant: 423).isActive = true
+        formulaImageView.heightAnchor.constraint(equalToConstant: 27).isActive = true
         
         //resistorview contraint
         resistorView.translatesAutoresizingMaskIntoConstraints = false
         resistorView.heightAnchor.constraint(equalToConstant: 130).isActive = true
         resistorView.widthAnchor.constraint(equalToConstant: 500).isActive = true
         resistorView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        resistorView.topAnchor.constraint(equalTo: resistanceLabel.bottomAnchor, constant: 50).isActive = true
+        resistorView.topAnchor.constraint(equalTo: formulaImageView.bottomAnchor, constant: 35).isActive = true
         
         //resistor image view contraint
         resistorImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -187,121 +186,6 @@ class MyViewController : UIViewController {
         ringFourView.widthAnchor.constraint(equalToConstant: 18.5).isActive = true
         
         //line view contraint
-        lineImageView.translatesAutoresizingMaskIntoConstraints = false
-        lineImageView.topAnchor.constraint(equalTo: resistorView.bottomAnchor, constant: -6).isActive = true
-        lineImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
-        lineImageView.widthAnchor.constraint(equalToConstant: 512).isActive = true
-        lineImageView.heightAnchor.constraint(equalToConstant: 68).isActive = true
-        
-    }
-    
-    func setupLabelView() {
-        view.addSubview(titleLabel)
-        
-        titleLabel.text = "Resistor Color Code"
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 50)
-        titleLabel.textAlignment = .center
-        titleLabel.textColor = .black
-        titleLabel.backgroundColor = .red
-        
-        view.addSubview(resistanceLabel)
-        resistanceLabel.text = "Resistance Value : 90.000.000 ohm ± 5.0%"
-        resistanceLabel.font = resistanceLabel.font.withSize(30)
-        resistanceLabel.textAlignment = .center
-        resistanceLabel.textColor = .black
-        resistanceLabel.backgroundColor = .red
-        
-        setupLabelViewContraint()
-    }
-    
-    func setupLabelViewContraint() {
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 55).isActive = true
-        
-        resistanceLabel.translatesAutoresizingMaskIntoConstraints = false
-        resistanceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 25).isActive  =  true
-        resistanceLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
-        resistanceLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-    }
-    
-    func setupResistorView() {
-        view.addSubview(resistorView)
-        
-        resistorView.backgroundColor = .white
-        setupResistorViewContriant()
-    }
-    
-    func setupResistorViewContriant() {
-        resistorView.translatesAutoresizingMaskIntoConstraints = false
-        resistorView.heightAnchor.constraint(equalToConstant: 130).isActive = true
-        resistorView.widthAnchor.constraint(equalToConstant: 500).isActive = true
-        resistorView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        resistorView.topAnchor.constraint(equalTo: resistanceLabel.bottomAnchor, constant: 50).isActive = true
-    }
-    
-    func setupResistorImageView() {
-        resistorView.addSubview(resistorImageView)
-        resistorImageView.image = UIImage(named: "Resistor@3x.png")
-        setupResistorImageViewContriant()
-    }
-    
-    func setupResistorImageViewContriant() {
-        resistorImageView.translatesAutoresizingMaskIntoConstraints = false
-        resistorImageView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 0).isActive = true
-        resistorImageView.trailingAnchor.constraint(equalTo: resistorView.trailingAnchor, constant: 0).isActive = true
-        resistorImageView.topAnchor.constraint(equalTo: resistorView.topAnchor, constant: 0).isActive = true
-        resistorImageView.bottomAnchor.constraint(equalTo: resistorView.bottomAnchor, constant: 0).isActive = true
-    }
-    
-    func setupRingView() {
-        resistorView.addSubview(ringOneView)
-        resistorView.addSubview(ringTwoView)
-        resistorView.addSubview(ringThreeView)
-        resistorView.addSubview(ringFourView)
-        
-        ringOneView.backgroundColor = .white
-        ringTwoView.backgroundColor = .white
-        ringThreeView.backgroundColor = .white
-        ringFourView.backgroundColor = .white
-        
-        setupRingViewContriant()
-    }
-    
-    func setupRingViewContriant() {
-        ringOneView.translatesAutoresizingMaskIntoConstraints = false
-        ringOneView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 121.5).isActive = true
-        ringOneView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: -0.5).isActive = true
-        ringOneView.heightAnchor.constraint(equalToConstant: 122).isActive = true
-        ringOneView.widthAnchor.constraint(equalToConstant: 18).isActive = true
-        
-        ringTwoView.translatesAutoresizingMaskIntoConstraints = false
-        ringTwoView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 178).isActive = true
-        ringTwoView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: -0.5).isActive = true
-        ringTwoView.heightAnchor.constraint(equalToConstant: 100.5).isActive = true
-        ringTwoView.widthAnchor.constraint(equalToConstant: 18.5).isActive = true
-
-        ringThreeView.translatesAutoresizingMaskIntoConstraints = false
-        ringThreeView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 218.5).isActive = true
-        ringThreeView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: 0).isActive = true
-        ringThreeView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        ringThreeView.widthAnchor.constraint(equalToConstant: 18).isActive = true
-
-        ringFourView.translatesAutoresizingMaskIntoConstraints = false
-        ringFourView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 280).isActive = true
-        ringFourView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: 0.5).isActive = true
-        ringFourView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        ringFourView.widthAnchor.constraint(equalToConstant: 18.5).isActive = true
-        
-    }
-    
-    func setupLineImageView() {
-        view.addSubview(lineImageView)
-        lineImageView.image = UIImage(named: "Line@3x.png")
-        setupLineImageViewContriant()
-    }
-    
-    func setupLineImageViewContriant() {
         lineImageView.translatesAutoresizingMaskIntoConstraints = false
         lineImageView.topAnchor.constraint(equalTo: resistorView.bottomAnchor, constant: -6).isActive = true
         lineImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
