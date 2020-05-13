@@ -40,11 +40,18 @@ class MyViewController : UIViewController {
     let titleLabel = UILabel()
     let resistanceLabel  = UILabel()
     
+    var valueLabels = [UILabel]()
+    
+    let ringButtonStackView = UIStackView()
+    let colorButtonStackView1 = UIStackView()
+    let colorButtonStackView2 = UIStackView()
+    let colorButtonStackView3 = UIStackView()
     
     var resistorRings: [ColorCode] = [.none, .none, .none, .none]
     
     var rings: [Float] = [0, 0, 0, 0]
     let ringsType: [RingType] = [.digit, .digit, .multiplier, .tolerance]
+    var colors: [UIColor] =  [#colorLiteral(red: 0.04647368193, green: 0.01779429056, blue: 0.01532345638, alpha: 1), #colorLiteral(red: 0.6445639729, green: 0.1679448187, blue: 0.1656729877, alpha: 1), #colorLiteral(red: 1, green: 0.0007271112408, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.6460297108, blue: 0.007757570129, alpha: 1), #colorLiteral(red: 0.9998962283, green: 1, blue: 0, alpha: 1), #colorLiteral(red: 0, green: 0.6916304827, blue: 0.3131190538, alpha: 1), #colorLiteral(red: 0.01152653154, green: 0.4388318062, blue: 0.7538933158, alpha: 1), #colorLiteral(red: 1, green: 0, blue: 1, alpha: 1), #colorLiteral(red: 0.4519323111, green: 0.4520125389, blue: 0.4519209862, alpha: 1), #colorLiteral(red: 0.9998951554, green: 1, blue: 0.999871552, alpha: 1), #colorLiteral(red: 0.8821009398, green: 0.8446164131, blue: 0, alpha: 1), #colorLiteral(red: 0.8521430492, green: 0.8522866368, blue: 0.8521227837, alpha: 1), .clear]
     
     override func loadView() {
         
@@ -60,8 +67,10 @@ class MyViewController : UIViewController {
         self.view = view
         
         setupView()
+        setupStackViewRingButton()
+        setupStackViewColorButton()
         
-        let button = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 50))
+        let button = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 60))
         button.backgroundColor = .green
         button.setTitle("Test Button", for: .normal)
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
@@ -78,6 +87,119 @@ class MyViewController : UIViewController {
         resistanceLabel.text = "Resistance Value :0"
     }
     
+    func setupStackViewRingButton() {
+        
+        view.addSubview(ringButtonStackView)
+        
+        ringButtonStackView.axis = .horizontal
+        ringButtonStackView.distribution  = .fillEqually
+        ringButtonStackView.spacing   = 20
+
+        for i in 1...4 {
+            let button = UIButton()
+            button.setTitle("Ring \(i)", for: .normal)
+            button.titleLabel?.font = .systemFont(ofSize: 30)
+            button.setTitleColor(.black, for: .normal)
+            button.backgroundColor = #colorLiteral(red: 0.9795703292, green: 0.9797341228, blue: 0.9795469642, alpha: 1)
+            button.layer.borderWidth = 1
+            button.layer.borderColor = #colorLiteral(red: 0.5912953019, green: 0.5913977027, blue: 0.591280818, alpha: 1)
+            button.layer.cornerRadius = 10
+            button.tag = 20 + i
+            button.addTarget(self, action: #selector(ringButton), for: .touchUpInside)
+            ringButtonStackView.addArrangedSubview(button)
+        }
+        
+        ringButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+        ringButtonStackView.topAnchor.constraint(equalTo: lineImageView.bottomAnchor, constant: 15).isActive = true
+        ringButtonStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        ringButtonStackView.widthAnchor.constraint(equalToConstant: 660).isActive = true
+        ringButtonStackView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+    }
+    
+    @objc func ringButton(sender: UIButton!) {
+        print(sender.tag)
+        switch sender.tag {
+        case 21:
+            for label in valueLabels {
+                label.text = "-"
+            }
+            break
+        default:
+            break
+        }
+    }
+    
+    func setupStackViewColorButton() {
+        var index = 0
+        
+        colorButtonStackView1.axis = .vertical
+        colorButtonStackView1.distribution = .fillEqually
+        colorButtonStackView1.alignment = .center
+        colorButtonStackView1.spacing = 10
+        
+        for line in 0...2 {
+            let stackView = UIStackView()
+            stackView.axis = .horizontal
+            stackView.distribution = .fillEqually
+            stackView.spacing = 45
+            
+            var column = 4
+            if line == 2 {
+                column = 2
+            }
+            
+            for _ in 0...column {
+                let stackView2 = UIStackView()
+                stackView2.axis = .vertical
+                stackView2.distribution = .fill
+                stackView2.spacing = 5
+                
+                let label = UILabel()
+                label.text = "\(index)"
+                label.font = label.font.withSize(30)
+                label.textAlignment = .center
+                label.textColor = .black
+                valueLabels.append(label)
+                
+                let button = UIButton()
+                button.backgroundColor = colors[index]
+                if (index == 9) || (index == 12) {
+                    button.layer.borderWidth = 1
+                    button.layer.borderColor = #colorLiteral(red: 0.5912953019, green: 0.5913977027, blue: 0.591280818, alpha: 1)
+                }
+                button.layer.cornerRadius = 10
+                button.tag = index
+                button.addTarget(self, action: #selector(colorButton), for: .touchUpInside)
+                button.translatesAutoresizingMaskIntoConstraints = false
+                button.widthAnchor.constraint(equalToConstant: 60).isActive = true
+                button.heightAnchor.constraint(equalToConstant: 60).isActive = true
+                
+                stackView2.addArrangedSubview(label)
+                stackView2.addArrangedSubview(button)
+                stackView.addArrangedSubview(stackView2)
+                index += 1
+            }
+            colorButtonStackView1.addArrangedSubview(stackView)
+        }
+
+        view.addSubview(colorButtonStackView1)
+        colorButtonStackView1.translatesAutoresizingMaskIntoConstraints = false
+        colorButtonStackView1.topAnchor.constraint(equalTo: ringButtonStackView.bottomAnchor, constant: 30).isActive = true
+        colorButtonStackView1.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        colorButtonStackView1.widthAnchor.constraint(equalToConstant: 480).isActive = true
+        colorButtonStackView1.heightAnchor.constraint(equalToConstant: 204).isActive = true
+        
+        
+//        view.addSubview(colorButtonStackView2)
+//        colorButtonStackView2.translatesAutoresizingMaskIntoConstraints = false
+//        colorButtonStackView1.topAnchor.constraint(equalTo: ringButtonStackView.bottomAnchor, constant: 10).isActive = true
+//        colorButtonStackView1.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+    }
+    
+    @objc func colorButton(sender: UIButton!) {
+        print(sender.tag)
+    }
+    
     func setupView() {
         //title label
         view.addSubview(titleLabel)
@@ -85,7 +207,6 @@ class MyViewController : UIViewController {
         titleLabel.font = UIFont.boldSystemFont(ofSize: 50)
         titleLabel.textAlignment = .center
         titleLabel.textColor = .black
-        titleLabel.backgroundColor = .red
         
         //resistance label
         view.addSubview(resistanceLabel)
@@ -93,7 +214,6 @@ class MyViewController : UIViewController {
         resistanceLabel.font = resistanceLabel.font.withSize(30)
         resistanceLabel.textAlignment = .center
         resistanceLabel.textColor = .black
-        resistanceLabel.backgroundColor = .red
         
         //formula image view
         view.addSubview(formulaImageView)
@@ -121,8 +241,6 @@ class MyViewController : UIViewController {
         //line view
         view.addSubview(lineImageView)
         lineImageView.image = UIImage(named: "Line@3x.png")
-        
-        
         
         setupViewContraint()
     }
