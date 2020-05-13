@@ -73,6 +73,76 @@ class MyViewController : UIViewController {
         ringFourView.backgroundColor = .yellow
     }
     
+    func setupResistorView() {
+        view.addSubview(resistorView)
+        
+        resistorView.backgroundColor = .white
+        setupResistorViewContriant()
+    }
+    
+    func setupResistorViewContriant() {
+        resistorView.translatesAutoresizingMaskIntoConstraints = false
+        resistorView.heightAnchor.constraint(equalToConstant: 130).isActive = true
+        resistorView.widthAnchor.constraint(equalToConstant: 500).isActive = true
+        resistorView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        resistorView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+    }
+    
+    func setupResistorImageView() {
+        resistorView.addSubview(resistorImageView)
+        resistorImageView.image = UIImage(named: "Resistor@3x.png")
+        setupResistorImageViewContriant()
+    }
+    
+    func setupResistorImageViewContriant() {
+        resistorImageView.translatesAutoresizingMaskIntoConstraints = false
+        resistorImageView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 0).isActive = true
+        resistorImageView.trailingAnchor.constraint(equalTo: resistorView.trailingAnchor, constant: 0).isActive = true
+        resistorImageView.topAnchor.constraint(equalTo: resistorView.topAnchor, constant: 0).isActive = true
+        resistorImageView.bottomAnchor.constraint(equalTo: resistorView.bottomAnchor, constant: 0).isActive = true
+    }
+    
+    func setupRingView() {
+        resistorView.addSubview(ringOneView)
+        resistorView.addSubview(ringTwoView)
+        resistorView.addSubview(ringThreeView)
+        resistorView.addSubview(ringFourView)
+        
+        ringOneView.backgroundColor = .white
+        ringTwoView.backgroundColor = .white
+        ringThreeView.backgroundColor = .white
+        ringFourView.backgroundColor = .white
+        
+        setupRingViewContriant()
+    }
+    
+    func setupRingViewContriant() {
+        ringOneView.translatesAutoresizingMaskIntoConstraints = false
+        ringOneView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 121.5).isActive = true
+        ringOneView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: -0.5).isActive = true
+        ringOneView.heightAnchor.constraint(equalToConstant: 122).isActive = true
+        ringOneView.widthAnchor.constraint(equalToConstant: 18).isActive = true
+        
+        ringTwoView.translatesAutoresizingMaskIntoConstraints = false
+        ringTwoView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 178).isActive = true
+        ringTwoView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: -0.5).isActive = true
+        ringTwoView.heightAnchor.constraint(equalToConstant: 100.5).isActive = true
+        ringTwoView.widthAnchor.constraint(equalToConstant: 18.5).isActive = true
+
+        ringThreeView.translatesAutoresizingMaskIntoConstraints = false
+        ringThreeView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 218.5).isActive = true
+        ringThreeView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: 0).isActive = true
+        ringThreeView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        ringThreeView.widthAnchor.constraint(equalToConstant: 18).isActive = true
+
+        ringFourView.translatesAutoresizingMaskIntoConstraints = false
+        ringFourView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 280).isActive = true
+        ringFourView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: 0.5).isActive = true
+        ringFourView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        ringFourView.widthAnchor.constraint(equalToConstant: 18.5).isActive = true
+        
+    }
+    
     func getRingColor() {
         resistorRings[0] = .green
         resistorRings[1] = .green
@@ -188,78 +258,6 @@ class MyViewController : UIViewController {
         }
         return ringValue
     }
-    
-    
-    func setupResistorView() {
-        view.addSubview(resistorView)
-        
-        resistorView.backgroundColor = .white
-        setupResistorViewContriant()
-    }
-    
-    func setupResistorViewContriant() {
-        resistorView.translatesAutoresizingMaskIntoConstraints = false
-        resistorView.heightAnchor.constraint(equalToConstant: 130).isActive = true
-        resistorView.widthAnchor.constraint(equalToConstant: 500).isActive = true
-        resistorView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        resistorView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-    }
-    
-    func setupResistorImageView() {
-        resistorView.addSubview(resistorImageView)
-        resistorImageView.image = UIImage(named: "Resistor.png")
-        setupResistorImageViewContriant()
-    }
-    
-    func setupResistorImageViewContriant() {
-        resistorImageView.translatesAutoresizingMaskIntoConstraints = false
-        resistorImageView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 0).isActive = true
-        resistorImageView.trailingAnchor.constraint(equalTo: resistorView.trailingAnchor, constant: 0).isActive = true
-        resistorImageView.topAnchor.constraint(equalTo: resistorView.topAnchor, constant: 0).isActive = true
-        resistorImageView.bottomAnchor.constraint(equalTo: resistorView.bottomAnchor, constant: 0).isActive = true
-    }
-    
-    func setupRingView() {
-        resistorView.addSubview(ringOneView)
-        resistorView.addSubview(ringTwoView)
-        resistorView.addSubview(ringThreeView)
-        resistorView.addSubview(ringFourView)
-        
-        ringOneView.backgroundColor = .white
-        ringTwoView.backgroundColor = .white
-        ringThreeView.backgroundColor = .white
-        ringFourView.backgroundColor = .white
-        
-        setupRingViewContriant()
-    }
-    
-    func setupRingViewContriant() {
-        ringOneView.translatesAutoresizingMaskIntoConstraints = false
-        ringOneView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 122).isActive = true
-        ringOneView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: -0.5).isActive = true
-        ringOneView.heightAnchor.constraint(equalToConstant: 121).isActive = true
-        ringOneView.widthAnchor.constraint(equalToConstant: 17).isActive = true
-        
-        ringTwoView.translatesAutoresizingMaskIntoConstraints = false
-        ringTwoView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 179).isActive = true
-        ringTwoView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: 0).isActive = true
-        ringTwoView.heightAnchor.constraint(equalToConstant: 99).isActive = true
-        ringTwoView.widthAnchor.constraint(equalToConstant: 17).isActive = true
-
-        ringThreeView.translatesAutoresizingMaskIntoConstraints = false
-        ringThreeView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 219).isActive = true
-        ringThreeView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: 0).isActive = true
-        ringThreeView.heightAnchor.constraint(equalToConstant: 99).isActive = true
-        ringThreeView.widthAnchor.constraint(equalToConstant: 17).isActive = true
-
-        ringFourView.translatesAutoresizingMaskIntoConstraints = false
-        ringFourView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 281).isActive = true
-        ringFourView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: 1).isActive = true
-        ringFourView.heightAnchor.constraint(equalToConstant: 99).isActive = true
-        ringFourView.widthAnchor.constraint(equalToConstant: 17).isActive = true
-        
-    }
-    
     
 }
 // Present the view controller in the Live View window
