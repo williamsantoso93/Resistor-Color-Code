@@ -47,7 +47,7 @@ class MyViewController : UIViewController {
     let ringButtonStackView = UIStackView()
     let colorButtonStackView = UIStackView()
     
-    var resistorRings: [ColorCode] = [.none, .none, .none, .none]
+    var resistorRings: [ColorCode] = [.brown, .black, .red, .gold]
     
     var rings: [Float] = [0, 0, 0, 0]
     let ringsTypes: [RingType] = [.digit, .digit, .multiplier, .tolerance]
@@ -87,6 +87,14 @@ class MyViewController : UIViewController {
                     colorButtons[index].alpha = 1
                 }
             }
+            
+            for button in ringButtons {
+                if currentRing == button.tag {
+                    button.layer.borderWidth = 5
+                } else {
+                    button.layer.borderWidth = 1
+                }
+            }
         }
     }
     
@@ -100,6 +108,7 @@ class MyViewController : UIViewController {
         setupStackViewColorButton()
         
         currentRing = 21
+        getRingColor()
     }
     
     func setupStackViewRingButton() {
@@ -133,16 +142,6 @@ class MyViewController : UIViewController {
     
     @objc func ringButton(sender: UIButton!) {
         currentRing = sender.tag
-        
-        sender.isSelected = true
-        
-        for button in ringButtons {
-            if sender.tag == button.tag {
-                button.layer.borderWidth = 5
-            } else {
-                button.layer.borderWidth = 1
-            }
-        }
     }
     
     func setupStackViewColorButton() {
@@ -253,7 +252,7 @@ class MyViewController : UIViewController {
         
         //resistance label
         view.addSubview(resistanceLabel)
-        resistanceLabel.text = "Resistance Value : "
+        resistanceLabel.text = "Resistance Value : 1,000 ± 5% Ω"
         resistanceLabel.font = resistanceLabel.font.withSize(30)
         resistanceLabel.textAlignment = .center
         resistanceLabel.textColor = .black
@@ -275,10 +274,10 @@ class MyViewController : UIViewController {
         resistorView.addSubview(ringThreeView)
         resistorView.addSubview(ringFourView)
         
-        ringOneView.backgroundColor = .clear
-        ringTwoView.backgroundColor = .clear
-        ringThreeView.backgroundColor = .clear
-        ringFourView.backgroundColor = .clear
+        ringOneView.backgroundColor = .brown
+        ringTwoView.backgroundColor = .black
+        ringThreeView.backgroundColor = .red
+        ringFourView.backgroundColor = #colorLiteral(red: 0.8832723498, green: 0.8428586721, blue: 0.01232801843, alpha: 1)
         
         //line view
         view.addSubview(lineImageView)
@@ -364,6 +363,7 @@ class MyViewController : UIViewController {
 
         //Formatting to 1 decimal
         let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "id_ID")
         formatter.groupingSeparator = ","
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 2
