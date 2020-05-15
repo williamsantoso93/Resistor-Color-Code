@@ -85,13 +85,9 @@ class MyViewController : UIViewController {
                 if valueLabels[index].text == "" {
                     colorButtons[index].isEnabled = false
                     colorButtons[index].alpha = 0.25
-//                    colorButtons[index].isHidden = true
-//                    valueLabels[index].isHidden = true
                 } else {
                     colorButtons[index].isEnabled = true
                     colorButtons[index].alpha = 1
-//                    colorButtons[index].isHidden = false
-//                    valueLabels[index].isHidden = false
                 }
             }
             
