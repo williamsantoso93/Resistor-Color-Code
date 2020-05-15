@@ -30,15 +30,19 @@ class MyViewController : UIViewController {
     let formulaImageView = UIImageView()
     let resistorImageView = UIImageView()
     let lineImageView  = UIImageView()
+    let boxColorImageView = UIImageView()
     
     let ringOneView = UIView()
     let ringTwoView = UIView()
     let ringThreeView = UIView()
     let ringFourView = UIView()
     
-    let button = UIButton()
+    
     let titleLabel = UILabel()
     let resistanceLabel  = UILabel()
+    let resistanceValueLabel  = UILabel()
+    let infoButton = UIButton()
+    
     
     var valueLabels = [UILabel]()
     var ringButtons = [UIButton]()
@@ -48,9 +52,9 @@ class MyViewController : UIViewController {
     let colorButtonStackView = UIStackView()
     
     var resistorRings: [ColorCode] = [.brown, .black, .red, .gold]
-    
     var rings: [Float] = [0, 0, 0, 0]
     let ringsTypes: [RingType] = [.digit, .digit, .multiplier, .tolerance]
+    
     let colors: [UIColor] =  [#colorLiteral(red: 0.04647368193, green: 0.01779429056, blue: 0.01532345638, alpha: 1), #colorLiteral(red: 0.6445639729, green: 0.1679448187, blue: 0.1656729877, alpha: 1), #colorLiteral(red: 1, green: 0.0007271112408, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.6460297108, blue: 0.007757570129, alpha: 1), #colorLiteral(red: 0.9998962283, green: 1, blue: 0, alpha: 1), #colorLiteral(red: 0, green: 0.6916304827, blue: 0.3131190538, alpha: 1), #colorLiteral(red: 0.01152653154, green: 0.4388318062, blue: 0.7538933158, alpha: 1), #colorLiteral(red: 1, green: 0, blue: 1, alpha: 1), #colorLiteral(red: 0.4519323111, green: 0.4520125389, blue: 0.4519209862, alpha: 1), #colorLiteral(red: 0.9998951554, green: 1, blue: 0.999871552, alpha: 1), #colorLiteral(red: 0.8821009398, green: 0.8446164131, blue: 0, alpha: 1), #colorLiteral(red: 0.8521430492, green: 0.8522866368, blue: 0.8521227837, alpha: 1), .clear]
     let colorCodes: [ColorCode] = [.black, .brown, .red, .orange, .yellow, .green, .blue, .violet, .gray, .white, .gold, .silver, .none]
     
@@ -81,10 +85,13 @@ class MyViewController : UIViewController {
                 if valueLabels[index].text == "" {
                     colorButtons[index].isEnabled = false
                     colorButtons[index].alpha = 0.25
-                    
+//                    colorButtons[index].isHidden = true
+//                    valueLabels[index].isHidden = true
                 } else {
                     colorButtons[index].isEnabled = true
                     colorButtons[index].alpha = 1
+//                    colorButtons[index].isHidden = false
+//                    valueLabels[index].isHidden = false
                 }
             }
             
@@ -128,7 +135,7 @@ class MyViewController : UIViewController {
             button.layer.borderColor = #colorLiteral(red: 0.5912953019, green: 0.5913977027, blue: 0.591280818, alpha: 1)
             button.layer.cornerRadius = 10
             button.tag = 20 + i
-            button.addTarget(self, action: #selector(ringButton), for: .touchUpInside)
+            button.addTarget(self, action: #selector(ringButtonAction), for: .touchUpInside)
             ringButtons.append(button)
             ringButtonStackView.addArrangedSubview(button)
         }
@@ -138,10 +145,22 @@ class MyViewController : UIViewController {
         ringButtonStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         ringButtonStackView.widthAnchor.constraint(equalToConstant: 660).isActive = true
         ringButtonStackView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        //box Color Image View
+        view.addSubview(boxColorImageView)
+        boxColorImageView.image = UIImage(named: "Box Ring 1@3x.png")
+        
+        //box Color Image View contraint
+        boxColorImageView.translatesAutoresizingMaskIntoConstraints = false
+        boxColorImageView.topAnchor.constraint(equalTo: ringButtonStackView.bottomAnchor, constant: 5).isActive = true
+        boxColorImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
+        boxColorImageView.widthAnchor.constraint(equalToConstant: 571).isActive = true
+        boxColorImageView.heightAnchor.constraint(equalToConstant: 325).isActive = true
     }
     
-    @objc func ringButton(sender: UIButton!) {
+    @objc func ringButtonAction(sender: UIButton!) {
         currentRing = sender.tag
+        boxColorImageView.image = UIImage(named: "Box Ring \(sender.tag-20)@3x.png")
     }
     
     func setupStackViewColorButton() {
@@ -201,7 +220,7 @@ class MyViewController : UIViewController {
                 }
                 button.layer.cornerRadius = 10
                 button.tag = index
-                button.addTarget(self, action: #selector(colorButton), for: .touchUpInside)
+                button.addTarget(self, action: #selector(colorButtonAction), for: .touchUpInside)
                 button.translatesAutoresizingMaskIntoConstraints = false
                 button.widthAnchor.constraint(equalToConstant: 60).isActive = true
                 button.heightAnchor.constraint(equalToConstant: 60).isActive = true
@@ -221,7 +240,7 @@ class MyViewController : UIViewController {
         colorButtonStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
     }
     
-    @objc func colorButton(sender: UIButton!) {
+    @objc func colorButtonAction(sender: UIButton!) {
         switch currentRing {
         case 21:
             ringOneView.backgroundColor = sender.backgroundColor
@@ -242,6 +261,10 @@ class MyViewController : UIViewController {
         getRingColor()
     }
     
+    @objc func infoButtonAction(sender: UIButton!) {
+        formulaImageView.isHidden = !formulaImageView.isHidden
+    }
+    
     func setupView() {
         //title label
         view.addSubview(titleLabel)
@@ -250,16 +273,32 @@ class MyViewController : UIViewController {
         titleLabel.textAlignment = .center
         titleLabel.textColor = .black
         
-        //resistance label
-        view.addSubview(resistanceLabel)
-        resistanceLabel.text = "Resistance Value : 1,000 ± 5% Ω"
-        resistanceLabel.font = resistanceLabel.font.withSize(30)
-        resistanceLabel.textAlignment = .center
-        resistanceLabel.textColor = .black
+        //info button
+        view.addSubview(infoButton)
+        infoButton.setImage(UIImage(systemName: "info.circle"), for: .normal)
+        infoButton.setTitle(" ", for: .normal)
+        infoButton.titleLabel?.font = .systemFont(ofSize: 20)
+        infoButton.tintColor = .lightGray
+        infoButton.addTarget(self, action: #selector(infoButtonAction), for: .touchUpInside)
         
         //formula image view
         view.addSubview(formulaImageView)
         formulaImageView.image = UIImage(named: "Formula@3x.png")
+        formulaImageView.isHidden  = true
+        
+        //resistance label
+        view.addSubview(resistanceLabel)
+        resistanceLabel.text = "Resistance Value :"
+        resistanceLabel.font = resistanceLabel.font.withSize(30)
+        resistanceLabel.textAlignment = .center
+        resistanceLabel.textColor = .black
+        
+        //resistance value label
+        view.addSubview(resistanceValueLabel)
+        resistanceValueLabel.text = "1,000 ± 5% Ω"
+        resistanceValueLabel.font = UIFont.boldSystemFont(ofSize: 35)
+        resistanceValueLabel.textAlignment = .center
+        resistanceValueLabel.textColor = .black
         
         //resistorview
         view.addSubview(resistorView)
@@ -292,25 +331,36 @@ class MyViewController : UIViewController {
         titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
         titleLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 55).isActive = true
         
-        //resistance label contraint
-        resistanceLabel.translatesAutoresizingMaskIntoConstraints = false
-        resistanceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 25).isActive  =  true
-        resistanceLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
-        resistanceLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+        //info button
+        infoButton.translatesAutoresizingMaskIntoConstraints = false
+        infoButton.topAnchor.constraint(equalTo: self.titleLabel.topAnchor, constant: 0).isActive = true
+        infoButton.leadingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor, constant: 5).isActive = true
         
         //formula image view  contraint
         formulaImageView.translatesAutoresizingMaskIntoConstraints = false
-        formulaImageView.topAnchor.constraint(equalTo: resistanceLabel.bottomAnchor, constant: 10).isActive = true
+        formulaImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: -1).isActive = true
         formulaImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
         formulaImageView.widthAnchor.constraint(equalToConstant: 423).isActive = true
         formulaImageView.heightAnchor.constraint(equalToConstant: 27).isActive = true
+        
+        //resistance label contraint
+        resistanceLabel.translatesAutoresizingMaskIntoConstraints = false
+        resistanceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 36).isActive  =  true
+        resistanceLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+        resistanceLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+        
+        //resistance value label contraint
+        resistanceValueLabel.translatesAutoresizingMaskIntoConstraints = false
+        resistanceValueLabel.topAnchor.constraint(equalTo: resistanceLabel.bottomAnchor, constant: 0).isActive  =  true
+        resistanceValueLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+        resistanceValueLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
         
         //resistorview contraint
         resistorView.translatesAutoresizingMaskIntoConstraints = false
         resistorView.heightAnchor.constraint(equalToConstant: 130).isActive = true
         resistorView.widthAnchor.constraint(equalToConstant: 500).isActive = true
         resistorView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        resistorView.topAnchor.constraint(equalTo: formulaImageView.bottomAnchor, constant: 35).isActive = true
+        resistorView.topAnchor.constraint(equalTo: resistanceValueLabel.bottomAnchor, constant: 25).isActive = true
         
         //resistor image view contraint
         resistorImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -339,10 +389,10 @@ class MyViewController : UIViewController {
         ringThreeView.widthAnchor.constraint(equalToConstant: 18).isActive = true
 
         ringFourView.translatesAutoresizingMaskIntoConstraints = false
-        ringFourView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 280).isActive = true
+        ringFourView.leadingAnchor.constraint(equalTo: resistorView.leadingAnchor, constant: 280.5).isActive = true
         ringFourView.centerYAnchor.constraint(equalTo: resistorView.centerYAnchor, constant: 0.5).isActive = true
         ringFourView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        ringFourView.widthAnchor.constraint(equalToConstant: 18.5).isActive = true
+        ringFourView.widthAnchor.constraint(equalToConstant: 18).isActive = true
         
         //line view contraint
         lineImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -350,11 +400,9 @@ class MyViewController : UIViewController {
         lineImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
         lineImageView.widthAnchor.constraint(equalToConstant: 512).isActive = true
         lineImageView.heightAnchor.constraint(equalToConstant: 68).isActive = true
-        
     }
     
     func getRingColor() {
-        
         for i in 0...3 {
             rings[i] = colorToValue(ringColor: resistorRings[i], ringType: ringsTypes[i])
         }
@@ -371,9 +419,8 @@ class MyViewController : UIViewController {
         let formattedResistance = formatter.string(from: Float(resistance) as NSNumber)
         let formattedRing = formatter.string(from: Float(rings[3]) as NSNumber)
 
-        
         let resistanceString = "\(formattedResistance!) ± \(formattedRing!)% Ω"
-        resistanceLabel.text = "Resistance Value : \(resistanceString)"
+        resistanceValueLabel.text = "\(resistanceString)"
     }
     
     func calculateResistance(rings: [Float]) -> Float {
